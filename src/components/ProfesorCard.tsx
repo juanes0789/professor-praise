@@ -1,4 +1,5 @@
-import { Star, MessageSquare } from "lucide-react";
+import { Star, MessageSquare, Eye } from "lucide-react";
+import { Link } from "react-router-dom";
 import { Profesor } from "@/types/profesor";
 import { Button } from "@/components/ui/button";
 
@@ -46,12 +47,23 @@ const ProfesorCard = ({ profesor, onRateClick }: ProfesorCardProps) => {
         </div>
       </div>
 
-      <Button
-        onClick={onRateClick}
-        className="w-full bg-gradient-primary hover:opacity-90 transition-smooth"
-      >
-        Calificar
-      </Button>
+      <div className="flex gap-2">
+        <Link to={`/profesores/${profesor.id}`} className="flex-1">
+          <Button
+            variant="outline"
+            className="w-full"
+          >
+            <Eye className="w-4 h-4 mr-2" />
+            Ver detalles
+          </Button>
+        </Link>
+        <Button
+          onClick={onRateClick}
+          className="flex-1 bg-gradient-primary hover:opacity-90 transition-smooth"
+        >
+          Calificar
+        </Button>
+      </div>
     </div>
   );
 };

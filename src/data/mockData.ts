@@ -1,4 +1,4 @@
-import { Profesor } from "@/types/profesor";
+import { Profesor, Comentario } from "@/types/profesor";
 
 export const mockProfesores: Profesor[] = [
   {
@@ -8,6 +8,29 @@ export const mockProfesores: Profesor[] = [
     facultad: "Ingeniería",
     promedio: 4.8,
     totalCalificaciones: 156,
+    comentarios: [
+      {
+        id: 1,
+        puntuacion: 5,
+        comentario: "Excelente profesor, explica muy bien los conceptos y es muy paciente.",
+        alias: "Usuario123",
+        fecha: "2024-01-15"
+      },
+      {
+        id: 2,
+        puntuacion: 5,
+        comentario: "Las clases son muy dinámicas y siempre está dispuesto a ayudar.",
+        alias: "Estudiante456",
+        fecha: "2024-01-20"
+      },
+      {
+        id: 3,
+        puntuacion: 4,
+        comentario: "Buen profesor, aunque a veces va un poco rápido.",
+        alias: "Anonimo789",
+        fecha: "2024-02-01"
+      }
+    ]
   },
   {
     id: 2,
@@ -16,6 +39,22 @@ export const mockProfesores: Profesor[] = [
     facultad: "Ciencias",
     promedio: 4.6,
     totalCalificaciones: 98,
+    comentarios: [
+      {
+        id: 4,
+        puntuacion: 5,
+        comentario: "Increíble profesora, hace que la física cuántica sea comprensible.",
+        alias: "FisicaFan",
+        fecha: "2024-01-18"
+      },
+      {
+        id: 5,
+        puntuacion: 4,
+        comentario: "Muy buena, pero los exámenes son difíciles.",
+        alias: "Usuario999",
+        fecha: "2024-02-05"
+      }
+    ]
   },
   {
     id: 3,
@@ -24,6 +63,29 @@ export const mockProfesores: Profesor[] = [
     facultad: "Informática",
     promedio: 4.9,
     totalCalificaciones: 203,
+    comentarios: [
+      {
+        id: 6,
+        puntuacion: 5,
+        comentario: "El mejor profesor de programación. Muy actualizado y práctico.",
+        alias: "DevMaster",
+        fecha: "2024-01-10"
+      },
+      {
+        id: 7,
+        puntuacion: 5,
+        comentario: "Aprendí muchísimo. Sus proyectos son muy útiles para el mundo real.",
+        alias: "CodeNinja",
+        fecha: "2024-01-25"
+      },
+      {
+        id: 8,
+        puntuacion: 5,
+        comentario: "Explica todo paso a paso, perfecto para principiantes.",
+        alias: "Newbie123",
+        fecha: "2024-02-10"
+      }
+    ]
   },
   {
     id: 4,

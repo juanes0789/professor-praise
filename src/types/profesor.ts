@@ -1,3 +1,11 @@
+export interface Comentario {
+  id: number;
+  puntuacion: number;
+  comentario: string;
+  alias: string;
+  fecha: string;
+}
+
 export interface Profesor {
   id: number;
   nombre: string;
@@ -6,4 +14,5 @@ export interface Profesor {
   promedio: number;
   totalCalificaciones: number;
   foto?: string;
+  comentarios?: Comentario[];
 }
