@@ -1,3 +1,7 @@
+# Professor Praise — Monorepo (backend + frontend)
+
+Este repositorio contiene dos carpetas principales:
+<<<<<<< HEAD
 # Welcome to your Lovable project
 
 ## Project info
@@ -38,27 +42,14 @@ npm run dev
 
 **Edit a file directly in GitHub**
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
 
 **Use GitHub Codespaces**
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
 
 ## What technologies are used for this project?
 
 This project is built with:
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
 
 ## How can I deploy this project?
 
@@ -71,3 +62,53 @@ Yes, you can!
 To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
 
 Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+=======
+
+Este repositorio contiene dos carpetas principales:
+- `prof-rate-backend/` — servidor Node.js (API, DB, servicios)
+- `prof-rate-frontend/` — cliente (Vite + React/TypeScript)
+
+Instrucciones rápidas para preparar y subir a GitHub:
+
+1) Inicializar repo local (si aún no está):
+
+   git init
+   git add .
+   git commit -m "Initial commit: backend + frontend"
+
+2) Crear repo en GitHub y empujar (opciones):
+
+- Opción A (CLI `gh`, recomendada si la tienes configurada):
+
+   gh repo create NOMBRE_DEL_REPO --public --source=. --remote=origin --push
+
+- Opción B (manual):
+
+   - Crea un nuevo repositorio en https://github.com
+   - Añade el remote y empuja:
+
+     git remote add origin git@github.com:TU_USUARIO/NOMBRE_DEL_REPO.git
+     git branch -M main
+     git push -u origin main
+
+3) Ejecutar localmente:
+
+- Backend (desde `prof-rate-backend`):
+
+  cd prof-rate-backend
+  npm install
+  npm run start (o npm run dev según el proyecto)
+
+- Frontend (desde `prof-rate-frontend`):
+
+  cd prof-rate-frontend
+  npm install
+  npm run dev
+
+Si quieres, puedo:
+
+- Inicializar el repo git localmente y hacer el commit inicial ahora.
+- Intentar crear el repo en GitHub por ti (usando `gh`) si me indicas el nombre y si debe ser público o privado.
+
+Dime cómo prefieres que proceda.
+>>>>>>> 4ec9c94 (Initial commit: backend + frontend)
