@@ -1,3 +1,4 @@
+//ProfesorCard.tsx
 import { Star, MessageSquare, Eye } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Profesor } from "@/types/profesor";
@@ -9,6 +10,9 @@ interface ProfesorCardProps {
 }
 
 const ProfesorCard = ({ profesor, onRateClick }: ProfesorCardProps) => {
+  if (!profesor) {
+    return null; 
+  }
   const renderStars = (rating: number) => {
     return Array.from({ length: 5 }, (_, i) => (
       <Star
@@ -26,19 +30,19 @@ const ProfesorCard = ({ profesor, onRateClick }: ProfesorCardProps) => {
     <div className="bg-card rounded-lg shadow-card hover:shadow-hover transition-smooth p-6 space-y-4">
       <div className="flex items-center gap-4">
         <div className="w-16 h-16 rounded-full bg-gradient-primary flex items-center justify-center text-2xl font-bold text-primary-foreground">
-          {profesor.name.charAt(0)}
+          {profesor.nombre?.charAt(0) ?? 'U'}
         </div>
         <div className="flex-1">
-          <h3 className="font-bold text-lg text-foreground">{profesor.name}</h3>
-          <p className="text-sm text-muted-foreground">{profesor.subject}</p>
-          <p className="text-xs text-muted-foreground">{profesor.faculty}</p>
+          <h3 className="font-bold text-lg text-foreground">{profesor.nombre}</h3>
+          <p className="text-sm text-muted-foreground">{profesor.materia}</p>
+          <p className="text-xs text-muted-foreground">{profesor.facultad}</p>
         </div>
       </div>
 
       <div className="space-y-2">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-1">{renderStars(profesor.promedio)}</div>
-          <span className="font-bold text-foreground">{profesor.promedio.toFixed(1)}</span>
+          <span className="font-bold text-foreground">{profesor.promedio.toFixed(1) ?? '0.0'}</span>
         </div>
 
         <div className="flex items-center gap-2 text-sm text-muted-foreground">

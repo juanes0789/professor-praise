@@ -1,3 +1,4 @@
+//RankingBar.tsx
 import { Trophy, TrendingDown, ArrowUpDown } from "lucide-react";
 import { Profesor } from "@/types/profesor";
 import { Button } from "@/components/ui/button";
@@ -48,7 +49,7 @@ const RankingBar = ({ topProfesores, worstProfesores, sortOrder, onSortChange }:
                 <div className="text-right">
                   <div className="flex items-center gap-1">
                     <span className="text-rating-gold">⭐</span>
-                    <span className="font-bold text-foreground">{profesor.promedio.toFixed(1)}</span>
+                    <span className="font-bold text-foreground">{profesor.promedio.toFixed(1) ?? 'N/A'}</span>
                   </div>
                   <p className="text-xs text-muted-foreground">{profesor.totalCalificaciones} votos</p>
                 </div>
@@ -79,7 +80,7 @@ const RankingBar = ({ topProfesores, worstProfesores, sortOrder, onSortChange }:
                 <div className="text-right">
                   <div className="flex items-center gap-1">
                     <span className="text-rating-gold">⭐</span>
-                    <span className="font-bold text-foreground">{profesor.promedio.toFixed(1)}</span>
+                    <span className="font-bold text-foreground">{profesor.promedio.toFixed(1) ?? 'N/A'}</span>
                   </div>
                   <p className="text-xs text-muted-foreground">{profesor.totalCalificaciones} votos</p>
                 </div>

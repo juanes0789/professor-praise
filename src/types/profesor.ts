@@ -1,3 +1,4 @@
+//profesor.ts
 export interface Comentario {
   id: number;
   puntuacion: number;
@@ -8,9 +9,9 @@ export interface Comentario {
 
 export interface Profesor {
   id: number;
-  name: string;
-  subject: string;
-  faculty: string;
+  nombre: string;
+  materia: string;
+  facultad: string;
   promedio: number;
   totalCalificaciones: number;
   foto?: string;

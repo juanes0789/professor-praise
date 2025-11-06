@@ -1,159 +1,176 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useQuery, useQueryClient } from "@tanstack/react-query"; // Importar
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import Navbar from "@/components/Navbar";
 import RankingBar from "@/components/RankingBar";
 import ProfesorCard from "@/components/ProfesorCard";
 import RatingModal from "@/components/RatingModal";
-// import { mockProfesores } from "@/data/mockData"; // Ya no necesitamos esto
 import { Profesor } from "@/types/profesor";
-import { Skeleton } from "@/components/ui/skeleton"; // Para el estado de carga
+import { Skeleton } from "@/components/ui/skeleton";
 
-// Tipo para la respuesta de la API (antes de mapear)
+// Tipo para la respuesta de la API (COINCIDE CON LA DB)
 interface ApiProfesor {
-  id: number;
-  name: string;
-  subject: string;
-  faculty: string;
-  avg_score: number;
-  total_calificaciones: number;
-  foto?: string;
+  id: number;
+  name: string; // 🛑 CORREGIDO: Coincide con la columna 'name' de la DB
+  subject: string; // 🛑 CORREGIDO: Coincide con la columna 'subject' de la DB
+  faculty: string; // 🛑 CORREGIDO: Coincide con la columna 'faculty' de la DB
+  university: string; // 🛑 NUEVO: Coincide con la columna 'university' de la DB
+  avg_score: number;
+  total_calificaciones: number;
+  foto?: string; // Asumimos que 'foto' puede ser el nombre de la columna si existe
 }
 
-// Función para cargar los profesores desde la API
+// Función para cargar los profesores desde la API y mapear nombres
 const fetchProfesores = async (): Promise<Profesor[]> => {
-  const res = await fetch("/api/professors"); 
-  if (!res.ok) {
-    throw new Error("Error al cargar los profesores");
-  }
-  const data: ApiProfesor[] = await res.json();
+  const res = await fetch("/api/professors"); 
+  if (!res.ok) {
+    throw new Error("Error al cargar los profesores");
+  }
+  const data: ApiProfesor[] = await res.json();
+  
+  return data.map((prof) => {
+    // Desestructuramos usando los nombres de la DB
+    const { 
+        id, 
+        name, 
+        subject, 
+        faculty, 
+        university, // Incluimos university
+        avg_score, 
+        total_calificaciones, 
+        foto 
+    } = prof;
 
-  // Mapeamos los nombres de la API a los nombres de nuestro tipo Frontend
-  return data.map((prof) => ({
-    ...prof, // <--- ¡ESTA LÍNEA ES LA MÁS IMPORTANTE!
-    promedio: prof.avg_score,
-    totalCalificaciones: prof.total_calificaciones,
-  }));
+    return ({
+        id: Number(id),
+        
+        // 🛑 Mapeo de DB (camelCase) a Frontend (español) 🛑
+        nombre: name, // name -> nombre
+        materia: subject, // subject -> materia
+        facultad: faculty, // faculty -> facultad
+        university: university, // university -> university (si lo usas en el tipo Profesor)
+        foto: foto,
+        
+        // Mapeo de datos numéricos
+        promedio: Number(avg_score) || 0,
+        totalCalificaciones: Number(total_calificaciones) || 0, 
+    });
+  });
 };
 
 const Profesores = () => {
-  const navigate = useNavigate();
-  // const [profesores, setProfesores] = useState<Profesor[]>(mockProfesores); // Reemplazado por React Query
-  const [selectedProfesor, setSelectedProfesor] = useState<Profesor | null>(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
-  
-  const queryClient = useQueryClient(); // Para invalidar la caché después
+  // ... (el resto del componente no necesita cambios)
+  
+  const navigate = useNavigate();
+  const [selectedProfesor, setSelectedProfesor] = useState<Profesor | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
+  
+  const queryClient = useQueryClient();
 
-  useEffect(() => {
-    const storedAlias = localStorage.getItem("userAlias");
-    if (!storedAlias) {
-      navigate("/login");
-    }
-  }, [navigate]);
+  useEffect(() => {
+    const storedAlias = localStorage.getItem("userAlias");
+    if (!storedAlias) {
+      navigate("/login");
+    }
+  }, [navigate]);
 
-  // Usar useQuery para cargar los datos
-  const { data: profesores = [], isLoading, isError } = useQuery<Profesor[]>({
-    queryKey: ["profesores"], // Clave para la caché
-    queryFn: fetchProfesores, // Función que carga los datos
-  });
+  // Usar useQuery para cargar los datos
+  const { data: profesores = [], isLoading, isError } = useQuery<Profesor[]>({
+    queryKey: ["profesores"],
+    queryFn: fetchProfesores,
+  });
 
-  const handleRateClick = (profesor: Profesor) => {
-    setSelectedProfesor(profesor);
-    setIsModalOpen(true);
-  };
+  const handleRateClick = (profesor: Profesor) => {
+    setSelectedProfesor(profesor);
+    setIsModalOpen(true);
+  };
 
-  const handleRatingSubmit = (puntuacion: number, comentario: string) => {
-    if (!selectedProfesor) return;
+  const handleRatingSubmit = (puntuacion: number, comentario: string) => {
+    if (!selectedProfesor) return;
 
-    // ---
-    // TODO: Aquí es donde harías la mutación (POST) al backend
-    // Por ahora, solo actualizamos localmente y refrescamos.
-    // ---
-    
-    // En lugar de setProfesores, invalidamos la caché de react-query
-    // para que vuelva a cargar los datos actualizados del servidor.
-    queryClient.invalidateQueries({ queryKey: ["profesores"] });
-    
-    console.log({ puntuacion, comentario }); // Lógica temporal
+    // TODO: Lógica de mutación POST al backend aquí
+    
+    queryClient.invalidateQueries({ queryKey: ["profesores"] });
+    console.log({ puntuacion, comentario }); 
 
-    setIsModalOpen(false);
-  };
+    setIsModalOpen(false);
+  };
 
-  // Ordenamos los datos de `profesores` que vienen de useQuery
-  const sortedProfesores = [...profesores].sort((a, b) => {
-    return sortOrder === "desc"
-      ? b.promedio - a.promedio
-      : a.promedio - b.promedio;
-  });
+  // Ordenamos los datos de `profesores` que vienen de useQuery
+  const sortedProfesores = [...profesores].sort((a, b) => {
+    return sortOrder === "desc"
+      ? b.promedio - a.promedio
+      : a.promedio - b.promedio;
+  });
 
-  const topProfesores = [...profesores]
-    .sort((a, b) => b.promedio - a.promedio)
-    .slice(0, 3);
+  const topProfesores = [...profesores]
+    .sort((a, b) => b.promedio - a.promedio)
+    .slice(0, 3);
 
-  const worstProfesores = [...profesores]
-    .sort((a, b) => a.promedio - b.promedio)
-    .slice(0, 3);
+  const worstProfesores = [...profesores]
+    .sort((a, b) => a.promedio - b.promedio)
+    .slice(0, 3);
 
-  // Manejar estado de carga
-  if (isLoading) {
-    return (
-      <div className="min-h-screen bg-background">
-        <Navbar />
-        <main className="container mx-auto px-4 py-8">
-          {/* Esqueletos de carga */}
-          <Skeleton className="h-64 w-full rounded-lg mb-8" />
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mt-8">
-            {[...Array(8)].map((_, i) => <Skeleton key={i} className="h-48 w-full rounded-lg" />)}
-          </div>
-        </main>
-      </div>
-    );
-  }
+  // Manejar estado de carga
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-background">
+        <Navbar />
+        <main className="container mx-auto px-4 py-8">
+          {/* Esqueletos de carga */}
+          <Skeleton className="h-64 w-full rounded-lg mb-8" />
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mt-8">
+            {[...Array(8)].map((_, i) => <Skeleton key={i} className="h-48 w-full rounded-lg" />)}
+          </div>
+        </main>
+      </div>
+    );
+  }
 
-  // Manejar estado de error
-  if (isError) {
-    return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        Error al cargar los datos. Intenta de nuevo más tarde.
-      </div>
-    );
-  }
+  // Manejar estado de error
+  if (isError) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        Error al cargar los datos. Intenta de nuevo más tarde.
+      </div>
+    );
+  }
 
 return (
-    <div className="min-h-screen bg-background">
-      <Navbar />
+    <div className="min-h-screen bg-background">
+      <Navbar />
 
-      <main className="container mx-auto px-4 py-8">
-        <RankingBar
-          topProfesores={topProfesores}
-          worstProfesores={worstProfesores}
-          sortOrder={sortOrder}
-          onSortChange={setSortOrder}
-        />
+      <main className="container mx-auto px-4 py-8">
+        <RankingBar
+          topProfesores={topProfesores}
+          worstProfesores={worstProfesores}
+          sortOrder={sortOrder}
+          onSortChange={setSortOrder}
+        />
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mt-8">
-          {sortedProfesores.map((profesor) => (
-            <ProfesorCard
-              key={profesor.id}
-              profesor={profesor}
-              onRateClick={() => handleRateClick(profesor)}
-            />
-          ))}
-        </div>
-      </main>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mt-8">
+          {sortedProfesores.map((profesor) => (
+            <ProfesorCard
+              key={profesor.id}
+              profesor={profesor}
+              onRateClick={() => handleRateClick(profesor)}
+            />
+          ))}
+        </div>
+      </main>
 
-      {selectedProfesor && (
-        <RatingModal
-          isOpen={isModalOpen}
-          onClose={() => setIsModalOpen(false)}
-          profesor={selectedProfesor}
-          onSubmit={handleRatingSubmit}
-          
-        />
-      )}
-    </div>
-  );
+      {selectedProfesor && (
+        <RatingModal
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          profesor={selectedProfesor}
+          onSubmit={handleRatingSubmit}
+          
+        />
+      )}
+    </div>
+  );
 };
 
 export default Profesores;
