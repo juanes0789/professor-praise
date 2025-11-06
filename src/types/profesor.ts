@@ -8,9 +8,9 @@ export interface Comentario {
 
 export interface Profesor {
   id: number;
-  nombre: string;
-  materia: string;
-  facultad: string;
+  name: string;
+  subject: string;
+  faculty: string;
   promedio: number;
   totalCalificaciones: number;
   foto?: string;

@@ -26,12 +26,12 @@ const ProfesorCard = ({ profesor, onRateClick }: ProfesorCardProps) => {
     <div className="bg-card rounded-lg shadow-card hover:shadow-hover transition-smooth p-6 space-y-4">
       <div className="flex items-center gap-4">
         <div className="w-16 h-16 rounded-full bg-gradient-primary flex items-center justify-center text-2xl font-bold text-primary-foreground">
-          {profesor.nombre.charAt(0)}
+          {profesor.name.charAt(0)}
         </div>
         <div className="flex-1">
-          <h3 className="font-bold text-lg text-foreground">{profesor.nombre}</h3>
-          <p className="text-sm text-muted-foreground">{profesor.materia}</p>
-          <p className="text-xs text-muted-foreground">{profesor.facultad}</p>
+          <h3 className="font-bold text-lg text-foreground">{profesor.name}</h3>
+          <p className="text-sm text-muted-foreground">{profesor.subject}</p>
+          <p className="text-xs text-muted-foreground">{profesor.faculty}</p>
         </div>
       </div>
 
