@@ -13,10 +13,9 @@ export default defineConfig({
     proxy: {
       // Cualquier petición que empiece con '/api'
       '/api': {
-        // Redirígela a tu backend en el puerto 4000
-        target: 'http://localhost:4000',
+        target: 'http://localhost:3001',
         changeOrigin: true,
-        // NO debe haber 'rewrite' aquí
+        secure: false
       },
     },
   },
