@@ -192,18 +192,18 @@ const ProfesorDetail = () => {
           Volver a profesores
         </Link>
 
-        <div className="bg-card rounded-lg shadow-card p-8 mb-8">
-          <div className="flex flex-col md:flex-row items-start gap-6">
-            <div className="w-24 h-24 rounded-full bg-gradient-primary flex items-center justify-center text-4xl font-bold text-primary-foreground flex-shrink-0">
-              {profesor.name.charAt(0)}
-            </div>
-            
-            <div className="flex-1 space-y-4">
-              <div>
-                <h1 className="font-bold text-3xl text-foreground mb-2">{profesor.name}</h1>
-                <p className="text-lg text-muted-foreground">{profesor.subject}</p>
-                <p className="text-md text-muted-foreground">{profesor.faculty}</p>
-              </div>
+        <div className="bg-card rounded-lg shadow-card p-8 mb-8">
+          <div className="flex flex-col md:flex-row items-start gap-6">
+            <div className="w-24 h-24 rounded-full bg-gradient-primary flex items-center justify-center text-4xl font-bold text-primary-foreground flex-shrink-0">
+              {profesor.nombre?.charAt(0) ?? 'P'}            
+              </div>
+            
+            <div className="flex-1 space-y-4">
+              <div>
+                <h1 className="font-bold text-3xl text-foreground mb-2">{profesor.nombre}</h1>
+                <p className="text-lg text-muted-foreground">{profesor.materia}</p>
+                <p className="text-md text-muted-foreground">{profesor.facultad}</p>
+              </div>
 
               <div className="flex items-center gap-4">
                 <div className="flex items-center gap-2">
